@@ -208,7 +208,10 @@ def search(request):
         drugs = Drug.objects.filter(
             Q(name__icontains=query) | Q(batch_no__icontains=query))
 
-    context = {'drugs': drugs}
+    # Get all clients for the dropdown
+    clients = Client.objects.all().order_by('name')
+
+    context = {'drugs': drugs, 'clients': clients}
     return render(request, 'Inventory/home.html', context)
 
 
@@ -1165,7 +1168,10 @@ def search_cannister(request):
             Q(litres__icontains=query)    # Search by litres
         )
 
-    return render(request, 'Inventory/cannister.html', {'cannisters': results, 'query': query})
+    # Get all clients for the dropdown
+    clients = Client.objects.all().order_by('name')
+
+    return render(request, 'Inventory/cannister.html', {'cannisters': results, 'query': query, 'clients': clients})
 @login_required
 def download_top_sold(request):
     # Aggregate total quantity sold for each product
