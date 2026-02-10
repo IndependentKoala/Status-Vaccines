@@ -309,6 +309,71 @@
             flex: 1;
         }
     }
+    @media (max-width: 480px) {
+        .table-responsive table,
+        .table-responsive thead,
+        .table-responsive tbody,
+        .table-responsive th,
+        .table-responsive td,
+        .table-responsive tr {
+            display: block;
+        }
+
+        .table-responsive thead tr {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+
+        .table-responsive tr {
+            border: 1px solid #e9ecef;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            padding: 10px;
+            background: #fff;
+        }
+
+        .table-responsive td {
+            border: none;
+            position: relative;
+            padding-left: 48%;
+            white-space: normal;
+            text-align: left;
+        }
+
+        .table-responsive td:before {
+            position: absolute;
+            left: 12px;
+            top: 12px;
+            white-space: nowrap;
+            font-weight: 600;
+            content: attr(data-label);
+        }
+
+        .action-buttons {
+            display: flex;
+            flex-direction: row;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons .btn-action {
+            flex: 1;
+            min-width: 90px;
+        }
+
+        .client-select {
+            width: 100%;
+        }
+
+        .header-title {
+            font-size: 20px;
+        }
+
+        .search-form .input-group {
+            width: 100%;
+        }
+    }
 </style>
 
 <div class="container-fluid" style="padding: 0 30px;">
@@ -359,9 +424,9 @@
                     <tbody>
                         {% for drug in drugs %}
                         <tr>
-                            <td class="text-left">{{ drug.name }}</td>
-                            <td>{{ drug.batch_no }}</td>
-                            <td>
+                            <td data-label="Vaccine" class="text-left">{{ drug.name }}</td>
+                            <td data-label="Batch No">{{ drug.batch_no }}</td>
+                            <td data-label="Stock">
                                 {% if drug.stock > drug.reorder_level %}
                                     <span class="badge badge-success">{{ drug.stock }}</span>
                                 {% elif drug.stock > 0 %}
@@ -370,10 +435,10 @@
                                     <span class="badge badge-danger">{{ drug.stock }}</span>
                                 {% endif %}
                             </td>
-                            <td style="white-space: nowrap;">{{ drug.expiry_date|date:"M Y"  }}</td>
-                            <td>{{ drug.dose_pack|floatformat:0 }}</td>
-                            <td>{{ drug.reorder_level|floatformat:0 }}</td>
-                            <td>
+                            <td data-label="Expiry Date" style="white-space: nowrap;">{{ drug.expiry_date|date:"M Y"  }}</td>
+                            <td data-label="Dose Pack">{{ drug.dose_pack|floatformat:0 }}</td>
+                            <td data-label="Re-order Level">{{ drug.reorder_level|floatformat:0 }}</td>
+                            <td data-label="Client">
                                 <select name="client" id="client-{{ drug.id }}" class="form-control form-control-sm client-select" required data-drug-id="{{ drug.id }}">
                                     <option value=""></option>
                                     {% for client in clients %}
@@ -381,7 +446,7 @@
                                     {% endfor %}
                                 </select>
                             </td>
-                            <td>
+                            <td data-label="Quantity">
                                 <input
                                     type="number"
                                     name="quantity"
@@ -395,7 +460,7 @@
                                     style="text-align: center;"
                                 >
                             </td>
-                            <td class="text-center">
+                            <td data-label="Actions" class="text-center">
                                 <div class="action-buttons">
                                     <form action="{% url 'sell' drug.id %}" method="POST" id="sell-form-{{ drug.id }}" style="display: inline;">
                                         {% csrf_token %}
